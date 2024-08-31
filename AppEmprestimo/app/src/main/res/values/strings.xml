@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">AppEmprestimo</string>
+    <string name="amort">Amort</string>
+    <string name="juros">Juros</string>
+    <string name="valor">Valor</string>
+    <string name="n_mero_parcelas">Número Parcelas</string>
+    <string name="Amortização" />
+    <string name="amortização">Amortização</string>
+    <string name="amortiza_o">Amortização</string>
 </resources>
