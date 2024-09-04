@@ -56,6 +56,7 @@ public class PlanilhaActivity extends AppCompatActivity {
         // adpter surgindo depois do cabecalho
         listView.setAdapter(new EmprestimoAdapter(this, R.layout.item_listview, list));
 
+
         listView.setOnItemClickListener((adapterView, view, i, l) -> {
             Parcela parcela = list.get(i - 1); // Ajuste para ignorar o header
             Toast.makeText(PlanilhaActivity.this,
