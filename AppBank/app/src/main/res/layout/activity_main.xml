@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#3B5E72"
+    android:backgroundTint="#3B5E72"
+    tools:context=".MainActivity">
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.50" />
+
+    <ImageView
+        android:id="@+id/imageViewSaldo"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_margin="50dp"
+        android:contentDescription="TODO"
+        android:src="@drawable/cifrao"
+        app:layout_constraintEnd_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewSaldo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:contentDescription="TODO"
+        android:text="Saldo"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/imageViewSaldo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewSaldo"
+
+        />
+
+    <ImageView
+        android:id="@+id/imageViewTransferencia"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_margin="50dp"
+        android:src="@drawable/transferencia"
+        app:layout_constraintEnd_toEndOf="@+id/guideline"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textViewSaldo" />
+
+    <TextView
+        android:id="@+id/textViewTransferencia"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="Transferência"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@id/imageViewSaldo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imageViewTransferencia"
+
+        />
+
+    <ImageView
+        android:id="@+id/imageViewFaturas"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_margin="50dp"
+        android:contentDescription="@string/todo"
+        android:src="@drawable/fatura"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textViewFaturas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:contentDescription="TODO"
+        android:importantForAccessibility="no"
+        android:text="Transferência"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/imageViewFaturas"
+
+        />
+
+    <ImageView
+        android:id="@+id/imageViewPoupanca"
+        android:layout_width="144dp"
+        android:layout_height="144dp"
+        android:layout_margin="50dp"
+        android:src="@drawable/cofrinho"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toTopOf="@id/textViewFaturas" />
+
+    <TextView
+        android:id="@+id/textViewPoupanca"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="24dp"
+        android:text="Poupança"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
+
+        app:layout_constraintStart_toStartOf="@id/guideline"
+        app:layout_constraintTop_toBottomOf="@id/imageViewPoupanca" />
+</androidx.constraintlayout.widget.ConstraintLayout>
