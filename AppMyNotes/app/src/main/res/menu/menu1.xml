@@ -1,0 +1,30 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/menu_add_note"
+        android:icon="@drawable/ic_add_note"
+        android:title="@string/nova_anota_o"
+        android:textColor="@color/menuItemColor"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_sort_priority"
+        android:icon="@drawable/ic_sort_priority"
+        android:title="@string/ordenar_por_prioridade"
+        android:textColor="@color/menuItemColor"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_sort_alpha"
+        android:icon="@drawable/ic_sort_priority1"
+        android:title="@string/ordenar_por_ordem_alfab_tica"
+        android:textColor="@color/menuItemColor"
+        app:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_close"
+        android:icon="@drawable/ic_close"
+        android:title="@string/fechar"
+        android:textColor="@color/menuItemColor"
+        app:showAsAction="ifRoom" />
+</menu>

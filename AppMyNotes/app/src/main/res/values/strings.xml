@@ -1,3 +1,21 @@
 <resources>
-    <string name="app_name">AppMyNotes</string>
+    <string name="app_name">AppMyNote</string>
+    <string name="baixa">Baixa</string>
+    <string name="salvar">Salvar</string>
+    <string name="t_tulo_da_nota">Título da nota</string>
+    <string name="alta">Alta</string>
+    <string name="normal">Normal</string>
+    <string name="conteudo">conteudo</string>
+    <string name="nova_anota_o">Nova Anotação</string>
+    <string name="fechar">Fechar</string>
+    <string name="ordenar_por_ordem_alfab_tica">Ordenar por Ordem Alfabética</string>
+    <string name="ordenar_por_prioridade">Ordenar por Prioridade</string>
+    <string name="titulo" />
+    <string name="prioridade">Prioridade</string>
+    <string name="t_tulo">Título</string>
+    <string name="conte_do">Conteúdo</string>
+    <string name="titulo_">titulo</string>
+    <string name="todo">TODO</string>
+    <string name="todos">TODO</string>
+    <string name="todoss">TODO</string>
 </resources>

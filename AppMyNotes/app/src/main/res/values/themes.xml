@@ -1,9 +1,32 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
-    <!-- Base application theme. -->
-    <style name="Base.Theme.AppMyNotes" parent="Theme.Material3.DayNight.NoActionBar">
-        <!-- Customize your light theme here. -->
-        <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
+<resources>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="android:windowFullscreen">true</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColorPrimary">@color/menuItemColor</item>
+
+        <item name="actionMenuTextColor">@color/menuItemColor</item>
+        <item name="android:popupMenuStyle">@style/OldStylePopupMenu</item>
     </style>
 
-    <style name="Theme.AppMyNotes" parent="Base.Theme.AppMyNotes" />
+    <style name="OldStylePopupMenu" parent="Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/menuBackground</item>
+        <item name="android:textColor">@color/menuItemColor</item>
+    </style>
+
+
+    <style name="CustomActionBar" parent="@style/Widget.AppCompat.Light.ActionBar.Solid">
+        <item name="android:background">@color/colorPrimary</item>
+        <item name="android:titleTextStyle">@style/CustomActionBarTitle</item>
+    </style>
+
+
+    <style name="CustomActionBarTitle" parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:icon">@drawable/note</item>
+        <item name="android:textColor">@color/menuItemColor</item>
+    </style>
+
+
 </resources>
