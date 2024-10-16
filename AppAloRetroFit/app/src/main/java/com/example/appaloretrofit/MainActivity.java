@@ -50,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
             tvRes.setText("Por favor, insira um CEP válido.");
             return;
         }
-        Call<Endereco> call = new RetrofitConfig().getCEPServicee().buscarCep(cep);
+        Call<Endereco> call = new RetrofitConfig().getCEPService().buscarCep(cep);
         call.enqueue(new Callback<Endereco>() {
             @Override
             public void onResponse(Call<Endereco> call, Response<Endereco> response) {

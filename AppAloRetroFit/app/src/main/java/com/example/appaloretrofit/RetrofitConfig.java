@@ -10,7 +10,9 @@ public class RetrofitConfig {
         this.retrofit = new Retrofit.Builder().baseUrl("https://viacep.com.br/ws/").addConverterFactory(GsonConverterFactory.create()).build();
     }
 
-    public  EnderecoService getCEPServicee(){
+    public EnderecoService getCEPService(){
         return this.retrofit.create(EnderecoService.class);
     }
 }
+
+
