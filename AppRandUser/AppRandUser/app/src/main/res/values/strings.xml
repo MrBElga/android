@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">AppRandUser</string>
+
+    <!-- Adicione os arrays de gêneros e nacionalidades -->
+    <string-array name="genders">
+        <item>male</item>
+        <item>female</item>
+    </string-array>
+
+    <string-array name="nationalities">
+        <item>BR</item>
+        <item>US</item>
+        <item>FR</item>
+        <item>DE</item>
+        <item>IT</item>
+        <!-- Adicione outras nacionalidades conforme necessário -->
+    </string-array>
+</resources>

@@ -1,0 +1,330 @@
+package com.example.appranduser;
+
+import android.os.Bundle;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.util.Log;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private PermissionsMarshmallow permissionsMarshmallow;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        permissionsMarshmallow = new PermissionsMarshmallow(this);
+
+        // Verificar e solicitar permissões de localização
+        checkPermissions();
+    }
+
+    private void checkPermissions() {
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+
+        if (permissionsMarshmallow.hasPermissions(permissions)) {
+            // Permissões já concedidas, você pode inicializar o fragmento de navegação ou qualquer configuração necessária
+            Log.d("MainActivity", "Permissões de localização já concedidas.");
+        } else {
+            // Solicitar permissões
+            ActivityCompat.requestPermissions(this, permissions, LOCATION_PERMISSION_REQUEST_CODE);
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permissão concedida
+                Toast.makeText(this, "Permissão de localização concedida", Toast.LENGTH_SHORT).show();
+            } else {
+                // Permissão negada
+                Toast.makeText(this, "Permissão de localização necessária para exibir a localização do usuário", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+}
+package com.example.appranduser;
+
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
+
+import androidx.core.app.ActivityCompat;
+
+public class PermissionsMarshmallow {
+    private Context mContext;
+
+    public PermissionsMarshmallow(Context context) {
+        mContext = context;
+    }
+
+    public boolean hasPermissions(String... permissions) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && mContext != null
+                && permissions != null) {
+            for (String permission : permissions) {
+                if (ActivityCompat.checkSelfPermission(mContext, permission) != PackageManager.PERMISSION_GRANTED) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public void requestPermissions(String[] PERMISSIONS, int PERMISSION_ALL) {
+        ActivityCompat.requestPermissions((Activity) mContext, PERMISSIONS, PERMISSION_ALL);
+    }
+}
+package com.example.appranduser;
+
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class RetrofitConfig {
+    private final Retrofit retrofit;
+
+    public RetrofitConfig() {
+        retrofit = new Retrofit.Builder().baseUrl("https://randomuser.me/").
+                addConverterFactory(GsonConverterFactory.create()).build();
+    }
+
+    public UserService getUserService() {
+        return this.retrofit.create(UserService.class);
+    }
+}package com.example.appranduser;
+
+ import android.annotation.SuppressLint;
+ import android.location.Location;
+ import android.os.Bundle;
+ import android.view.LayoutInflater;
+ import android.view.View;
+ import android.view.ViewGroup;
+ import android.widget.TextView;
+
+ import androidx.annotation.NonNull;
+ import androidx.fragment.app.Fragment;
+
+ import com.google.android.gms.location.FusedLocationProviderClient;
+ import com.google.android.gms.location.LocationServices;
+ import com.google.android.gms.maps.CameraUpdateFactory;
+ import com.google.android.gms.maps.GoogleMap;
+ import com.google.android.gms.maps.MapView;
+ import com.google.android.gms.maps.OnMapReadyCallback;
+ import com.google.android.gms.maps.model.LatLng;
+ import com.google.android.gms.maps.model.MarkerOptions;
+
+ public class UserLocationFragment extends Fragment implements OnMapReadyCallback {
+
+     private GoogleMap mMap;
+     private MapView mapView;
+     private TextView distanceTextView;
+     private String latitude;
+     private String longitude;
+     private FusedLocationProviderClient locationClient;
+
+     @Override
+     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+         View view = inflater.inflate(R.layout.fragment_user_location, container, false);
+
+         distanceTextView = view.findViewById(R.id.distance_text_view);
+         mapView = view.findViewById(R.id.map_view);
+
+         mapView.onCreate(savedInstanceState);
+         mapView.getMapAsync(this);
+
+         if (getArguments() != null) {
+             latitude = getArguments().getString("latitude");
+             longitude = getArguments().getString("longitude");
+         }
+
+         locationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
+
+         return view;
+     }
+
+     @SuppressLint("MissingPermission")
+     @Override
+     public void onMapReady(@NonNull GoogleMap googleMap) {
+         mMap = googleMap;
+
+         if (latitude != null && longitude != null) {
+             LatLng userLocation = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
+             mMap.clear(); // Limpa o mapa antes de adicionar o marcador
+             mMap.addMarker(new MarkerOptions().position(userLocation).title("User Location"));
+             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation, 10));
+
+             // Obtém a localização atual e calcula a distância
+             locationClient.getLastLocation().addOnSuccessListener(location -> {
+                 if (location != null) {
+                     LatLng deviceLocation = new LatLng(location.getLatitude(), location.getLongitude());
+                     double distance = calculateDistance(deviceLocation, userLocation);
+                     distanceTextView.setText("Distance: " + String.format("%.2f", distance) + " km");
+                 } else {
+                     distanceTextView.setText("Distance: Not available");
+                 }
+             });
+         } else {
+             distanceTextView.setText("Coordinates not available");
+         }
+     }
+
+     private double calculateDistance(LatLng start, LatLng end) {
+         double radius = 6371; // Raio da Terra em km
+         double latDiff = Math.toRadians(end.latitude - start.latitude);
+         double lngDiff = Math.toRadians(end.longitude - start.longitude);
+
+         double a = Math.sin(latDiff / 2) * Math.sin(latDiff / 2)
+                 + Math.cos(Math.toRadians(start.latitude)) * Math.cos(Math.toRadians(end.latitude))
+                 * Math.sin(lngDiff / 2) * Math.sin(lngDiff / 2);
+
+         double c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+         return radius * c;
+     }
+
+     @Override
+     public void onResume() {
+         super.onResume();
+         mapView.onResume();
+     }
+
+     @Override
+     public void onPause() {
+         super.onPause();
+         mapView.onPause();
+     }
+
+     @Override
+     public void onDestroy() {
+         super.onDestroy();
+         mapView.onDestroy();
+     }
+
+     @Override
+     public void onLowMemory() {
+         super.onLowMemory();
+         mapView.onLowMemory();
+     }
+
+     @Override
+     public void onSaveInstanceState(@NonNull Bundle outState) {
+         super.onSaveInstanceState(outState);
+         mapView.onSaveInstanceState(outState); // Salva o estado do mapa
+     }
+ }
+package com.example.appranduser;
+
+import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.Spinner;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+
+import com.squareup.picasso.Picasso;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+
+public class UserSelectionFragment extends Fragment {
+
+    private ImageView userImageView;
+    private TextView userNameTextView;
+    private TextView userAgeTextView;
+    private Spinner genderSpinner;
+    private Spinner nationalitySpinner;
+    private View rootView;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        rootView = inflater.inflate(R.layout.fragment_user_selection, container, false);
+
+        userImageView = rootView.findViewById(R.id.user_image);
+        userNameTextView = rootView.findViewById(R.id.user_name);
+        userAgeTextView = rootView.findViewById(R.id.user_age);
+        genderSpinner = rootView.findViewById(R.id.gender_spinner);
+        nationalitySpinner = rootView.findViewById(R.id.nationality_spinner);
+
+        // Configuração dos Spinners
+        ArrayAdapter<CharSequence> genderAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.genders, android.R.layout.simple_spinner_item);
+        genderAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        genderSpinner.setAdapter(genderAdapter);
+
+        ArrayAdapter<CharSequence> nationalityAdapter = ArrayAdapter.createFromResource(getContext(),
+                R.array.nationalities, android.R.layout.simple_spinner_item);
+        nationalityAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        nationalitySpinner.setAdapter(nationalityAdapter);
+
+        Button loadButton = rootView.findViewById(R.id.get_user);
+        loadButton.setOnClickListener(v -> loadUserData());
+
+        return rootView;
+    }
+
+    private void loadUserData() {
+        String selectedGender = genderSpinner.getSelectedItem().toString().toLowerCase();
+        String selectedNationality = nationalitySpinner.getSelectedItem().toString().toLowerCase();
+
+        Call<User> call = new RetrofitConfig().getUserService().getUser(selectedGender, selectedNationality);
+        call.enqueue(new Callback<User>() {
+            @Override
+            public void onResponse(Call<User> call, Response<User> response) {
+                if (response.isSuccessful() && response.body() != null) {
+                    User user = response.body();
+                    Result userResult = user.results.get(0);
+
+                    // Exibir o nome completo
+                    userNameTextView.setText(userResult.name.first + " " + userResult.name.last);
+
+                    // Exibir a idade
+                    userAgeTextView.setText("Idade: " + userResult.dob.age);
+
+                    // Carregar a imagem do usuário
+                    Picasso.get().load(userResult.picture.large).into(userImageView);
+
+                    // Listener para ver localização
+                    rootView.findViewById(R.id.view_location_button).setOnClickListener(v -> {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("latitude", userResult.location.coordinates.latitude);
+                        bundle.putString("longitude", userResult.location.coordinates.longitude);
+                        Navigation.findNavController(rootView).navigate(R.id.action_userSelection_to_userLocation, bundle);
+                    });
+                }
+            }
+
+            @Override
+            public void onFailure(Call<User> call, Throwable t) {
+                Log.e("API Error", "Failed to load user data: " + t.getMessage());
+            }
+        });
+    }
+}
+package com.example.appranduser;
+
+import retrofit2.Call;
+import retrofit2.http.GET;
+import retrofit2.http.Query;
+
+public interface UserService {
+
+    @GET("api")
+    public Call<User> getUser(@Query("gender") String gender, @Query("nat") String nat);
+}

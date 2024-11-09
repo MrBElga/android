@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/userSelectionFragment">
+
+    <fragment
+        android:id="@+id/userSelectionFragment"
+        android:name="com.example.appranduser.UserSelectionFragment"
+        android:label="User Selection">
+        <!-- Defina a ação para navegar para o UserLocationFragment -->
+        <action
+            android:id="@+id/action_userSelection_to_userLocation"
+            app:destination="@id/userLocationFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/userLocationFragment"
+        android:name="com.example.appranduser.UserLocationFragment"
+        android:label="User Location" />
+</navigation>
